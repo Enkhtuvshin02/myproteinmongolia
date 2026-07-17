@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Golos_Text, Oswald } from "next/font/google";
 import { Suspense } from "react";
-import "./globals.css";
+import "../globals.css";
 import { CartProvider } from "@/components/cart-context";
 import { AccountProvider } from "@/components/account-context";
 import { OrdersProvider } from "@/components/orders-context";
 import { Header } from "@/components/header";
-import { CategoryNav } from "@/components/category-nav";
+import { TopBar } from "@/components/top-bar";
 import { Footer } from "@/components/footer";
 import { CartDrawer } from "@/components/cart-drawer";
+import { PromotionPopup } from "@/components/promotion-popup";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin", "cyrillic"], // Mongolian uses Cyrillic
+const golos = Golos_Text({
+  variable: "--font-golos",
+  subsets: ["latin", "cyrillic"],
+});
+
+const oswald = Oswald({
+  variable: "--font-head",
+  subsets: ["latin", "cyrillic"],
+  weight: ["600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "GainHub — Уураг, спортын нэмэлт тэжээл",
+  title: "MyProtein Mongolia — Уураг, спортын нэмэлт тэжээл",
   description: "Whey уураг, креатин, дасгалын өмнөх, амин хүчил, иж бүрдэл — фитнесийн нэмэлт тэжээлийн цахим дэлгүүр",
 };
 
@@ -24,18 +31,19 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="mn" className={`${inter.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+    <html lang="mn" className={`${golos.variable} ${oswald.variable} h-full antialiased`}>
+      <body className="shop-body flex min-h-full flex-col bg-background text-foreground">
         <AccountProvider>
           <OrdersProvider>
             <CartProvider>
-              <Suspense fallback={<div className="h-[68px] border-b border-border-subtle" />}>
+              <TopBar />
+              <Suspense fallback={<div className="h-[72px] border-b border-shop-line" />}>
                 <Header />
               </Suspense>
-              <CategoryNav />
               <main className="flex-1">{children}</main>
               <Footer />
               <CartDrawer />
+              <PromotionPopup />
             </CartProvider>
           </OrdersProvider>
         </AccountProvider>

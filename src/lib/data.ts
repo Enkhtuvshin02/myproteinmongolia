@@ -1,12 +1,14 @@
 import type { Category, Product } from "./types";
 
-// GainHub — protein & fitness supplement categories (Mongolian).
+// MyProtein Mongolia — protein & fitness supplement categories (Mongolian).
 export const categories: Category[] = [
   { slug: "whey", name: "Уураг (Whey)" },
   { slug: "creatine", name: "Креатин" },
   { slug: "preworkout", name: "Дасгалын өмнөх" },
   { slug: "bcaa", name: "Амин хүчил, Витамин" },
   { slug: "bundle", name: "Иж бүрдэл" },
+  { slug: "snacks", name: "Эрүүл зууш (Snacks)" },
+  { slug: "vitamins", name: "Витамин, Эрдэс бодис" },
 ];
 
 const img = (name: string) => `/products/${name}`;

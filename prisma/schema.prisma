@@ -58,23 +58,66 @@ model Category {
 }
 
 model Product {
-  id            String          @id
-  name          String
-  price         Float
-  originalPrice Float?
-  image         String
-  categorySlug  String
-  category      Category        @relation(fields: [categorySlug], references: [slug])
-  rating        Float           @default(0)
-  stock         Int             @default(0)
-  isNew         Boolean         @default(false)
-  isFeatured    Boolean         @default(false)
-  isBundle      Boolean         @default(false)
-  unit          String?
-  flavors       ProductFlavor[]
-  orderItems    OrderItem[]
-  bundleItems   BundleItem[]    @relation("BundleParent")
-  inBundles     BundleItem[]    @relation("BundleChild")
+  id                   String             @id
+  name                 String
+  price                Float
+  originalPrice        Float?
+  image                String
+  categorySlug         String
+  category             Category           @relation(fields: [categorySlug], references: [slug])
+  rating               Float              @default(0)
+  stock                Int                @default(0)
+  isNew                Boolean            @default(false)
+  isFeatured           Boolean            @default(false)
+  isBundle             Boolean            @default(false)
+  unit                 String?
+  flavors              ProductFlavor[]
+  orderItems           OrderItem[]
+  bundleItems          BundleItem[]       @relation("BundleParent")
+  inBundles            BundleItem[]       @relation("BundleChild")
+  promotions           PromotionSetting[]
+
+  // Scraped rich details fields
+  brand                String?
+  url                  String?
+  descriptionAccordions Json?
+  nutritionTable       Json?
+  nutritionNotice      String?
+  variants             ProductVariant[]
+}
+
+model ProductVariant {
+  sku            String   @id
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  gtin           String?
+  flavour        String?
+  weight         String?
+  price          Float
+  currency       String   @default("GBP")
+  availability   String   @default("InStock")
+  url            String?
+  imageUrl       String?
+  localImagePath String?
+  stock          Int      @default(10)
+}
+
+model PromotionSetting {
+  id            String   @id @default("default")
+  isActive      Boolean  @default(false)
+  productId     String?
+  product       Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  title         String   @default("Урамшуулал!")
+  description   String   @default("Хямдралтай бүтээгдэхүүнийг амжиж аваарай!")
+  startDate     DateTime @default(now())
+  endDate       DateTime @default(now())
+  discountCode  String?  @default("")
+  discountValue String?  @default("")
+  imageUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model ProductFlavor {

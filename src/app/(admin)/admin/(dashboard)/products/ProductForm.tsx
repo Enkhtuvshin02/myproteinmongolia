@@ -144,7 +144,7 @@ export default function ProductForm({ productId, initial }: Props) {
               const info = result.info as { secure_url: string };
               if (info?.secure_url) set("image", info.secure_url);
             }}
-            options={{ maxFiles: 1, resourceType: "image", folder: "gainhub/products" }}
+            options={{ maxFiles: 1, resourceType: "image", folder: "myprotein/products" }}
           >
             {({ open }) => (
               <button

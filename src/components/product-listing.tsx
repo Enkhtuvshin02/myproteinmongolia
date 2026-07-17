@@ -61,22 +61,21 @@ export function ProductListing() {
   };
 
   return (
-    <div className="mx-auto max-w-[1280px] px-4 py-6">
-      <div className="flex flex-col gap-6 lg:flex-row">
+    <div className="mx-auto max-w-[1280px] px-4 py-8">
+      <div className="flex flex-col gap-8 lg:flex-row">
         {/* sidebar */}
-        <aside className="w-full shrink-0 lg:w-60">
-          <div className="mb-4">
-            <h3 className="mb-2 text-xs font-semibold uppercase text-muted-foreground">Шүүлтүүр</h3>
-            <ul className="space-y-1">
+        <aside className="w-full shrink-0 lg:w-56">
+          <div className="mb-6">
+            <h3 className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">Шүүлтүүр</h3>
+            <ul className="space-y-0.5">
               {filterChips.map((f) => (
                 <li key={f.key}>
                   <Link
                     href={linkWith({ filter: filter === f.key ? "" : f.key })}
-                    className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm ${
-                      filter === f.key ? "bg-brand/10 font-medium text-brand" : "hover:bg-muted"
+                    className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium ${
+                      filter === f.key ? "bg-shop-black text-white" : "hover:bg-shop-paper"
                     }`}
                   >
-                    <span className={`size-3.5 rounded-full border ${filter === f.key ? "border-brand bg-brand" : "border-border-subtle"}`} />
                     {f.label}
                   </Link>
                 </li>
@@ -84,10 +83,10 @@ export function ProductListing() {
             </ul>
           </div>
 
-          <h3 className="mb-2 text-xs font-semibold uppercase text-muted-foreground">Ангилал</h3>
+          <h3 className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">Ангилал</h3>
           <ul className="space-y-0.5">
             <li>
-              <Link href={linkWith({ category: "" })} className={`block rounded-md px-3 py-1.5 text-sm ${!category ? "bg-muted font-medium text-brand" : "hover:bg-muted"}`}>
+              <Link href={linkWith({ category: "" })} className={`block px-3 py-1.5 text-sm font-medium ${!category ? "bg-shop-black text-white" : "hover:bg-shop-paper"}`}>
                 Бүгд
               </Link>
             </li>
@@ -95,7 +94,7 @@ export function ProductListing() {
               <li key={c.slug}>
                 <Link
                   href={linkWith({ category: c.slug })}
-                  className={`block rounded-md px-3 py-1.5 text-sm ${category === c.slug ? "bg-muted font-medium text-brand" : "hover:bg-muted"}`}
+                  className={`block px-3 py-1.5 text-sm font-medium ${category === c.slug ? "bg-shop-black text-white" : "hover:bg-shop-paper"}`}
                 >
                   {c.name}
                 </Link>
@@ -106,11 +105,11 @@ export function ProductListing() {
 
         {/* grid */}
         <section className="flex-1">
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-xl font-bold">
+          <div className="mb-6 flex items-end justify-between border-b border-shop-line pb-4">
+            <h1 className="font-display text-2xl font-bold uppercase tracking-normal">
               {heading}
               {!loading && (
-                <span className="ml-2 text-sm font-normal text-muted-foreground">
+                <span className="ml-2 text-sm font-normal normal-case tracking-normal text-muted-foreground">
                   {list.length} бүтээгдэхүүн
                 </span>
               )}
@@ -118,7 +117,7 @@ export function ProductListing() {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as Sort)}
-              className="rounded-md border border-border-subtle bg-background px-3 py-1.5 text-sm outline-none focus:border-brand"
+              className="border border-shop-line bg-background px-3 py-1.5 text-sm outline-none focus:border-brand"
             >
               <option value="default">Эрэмбэлэх</option>
               <option value="price-asc">Үнэ: багаас их</option>

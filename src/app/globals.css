@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 /*
- * GainHub design tokens — sharp, athletic, data-dense.
- * Sports orange on charcoal/slate + stark white. No pastels, no soft radii.
+ * MyProtein Mongolia design tokens — sharp, athletic, data-dense.
+ * Brand teal on charcoal/slate + stark white. No pastels, no soft radii.
  */
 :root {
   --background: #ffffff;
   --foreground: #18181b;
 
-  /* GainHub sports-orange brand */
-  --brand: #ff5722;
-  --brand-hover: #e64a19;
+  /* MyProtein Mongolia brand teal */
+  --brand: #1E96A6;
+  --brand-hover: #167C8A;
   --brand-foreground: #ffffff;
 
   /* deep slate/charcoal — used for dark sections, admin chrome */
@@ -26,6 +26,14 @@
   --success: #16a34a;   /* in-stock / completed */
 
   --radius: 0.375rem;
+
+  /* Storefront-only redesign layer (editorial/brutalist lab aesthetic).
+     Namespaced separately from --ink/--muted so the admin panel,
+     which reuses those, is untouched. */
+  --shop-black: #0a0a0a;
+  --shop-black-soft: #161513;
+  --shop-paper: #f0f0f2;
+  --shop-line: #e0e0e4;
 }
 
 @theme inline {
@@ -45,6 +53,13 @@
 
   --radius-card: var(--radius);
   --font-sans: var(--font-inter);
+
+  /* storefront-only */
+  --color-shop-black: var(--shop-black);
+  --color-shop-black-soft: var(--shop-black-soft);
+  --color-shop-paper: var(--shop-paper);
+  --color-shop-line: var(--shop-line);
+  --font-display: var(--font-head);
 }
 
 body {
@@ -60,4 +75,18 @@ body {
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: var(--ink-soft);
   border-radius: 9999px;
+}
+
+/* storefront body copy — Golos Text, scoped to the (shop) route group's
+   <body> only via this class so the admin panel's Inter body is untouched */
+.shop-body {
+  font-family: var(--font-golos), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes shop-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-shop-marquee {
+  animation: shop-marquee 24s linear infinite;
 }

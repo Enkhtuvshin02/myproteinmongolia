@@ -39,6 +39,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# product images (handled outside git)
+/public/images
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -102,7 +102,7 @@ export default function OrderDetailPage() {
                     attachReceipt(order.id, info.secure_url).finally(() => setUploading(false));
                   }
                 }}
-                options={{ maxFiles: 1, resourceType: "image", folder: "gainhub/receipts" }}
+                options={{ maxFiles: 1, resourceType: "image", folder: "myprotein/receipts" }}
               >
                 {({ open }) => (
                   <label className="flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-border-subtle py-6 text-sm text-muted-foreground hover:border-brand hover:text-brand">
@@ -153,7 +153,7 @@ export default function OrderDetailPage() {
         <div className="flex items-center gap-2 border-b border-border-subtle bg-muted/40 px-4 py-3">
           <Package className="size-5 text-brand" />
           <div>
-            <p className="text-sm font-semibold">GainHub хүргэлт</p>
+            <p className="text-sm font-semibold">MyProtein Mongolia хүргэлт</p>
             <p className="text-xs text-muted-foreground">24-48 цагийн хооронд хүргэгдэнэ.</p>
           </div>
         </div>

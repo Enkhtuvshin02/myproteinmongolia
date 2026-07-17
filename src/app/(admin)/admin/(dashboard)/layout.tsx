@@ -13,11 +13,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then((user) => {
-        if (!user?.isAdmin) router.replace("/");
+        if (!user?.isAdmin) router.replace("/admin/login");
         else setChecking(false);
       })
-      .catch(() => router.replace("/"));
+      .catch(() => router.replace("/admin/login"));
   }, [router]);
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/admin/login");
+  };
 
   if (checking) {
     return (
@@ -31,6 +36,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/products", label: "Бүтээгдэхүүн" },
     { href: "/admin/orders", label: "Захиалга" },
+    { href: "/admin/promotion", label: "Урамшуулал (Pop-up)" },
   ];
 
   return (
@@ -38,7 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="flex w-56 shrink-0 flex-col border-r border-border-subtle bg-background">
         <div className="border-b border-border-subtle px-5 py-4">
           <span className="text-lg font-bold tracking-tight">
-            Gain<span className="rounded bg-brand px-1 py-0.5 text-white">Hub</span> Admin
+            <span className="text-brand">MyProtein</span> Admin
           </span>
         </div>
         <nav className="flex-1 py-3">
@@ -62,10 +68,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
-        <div className="border-t border-border-subtle px-5 py-4">
-          <Link href="/" className="text-xs text-muted-foreground hover:text-foreground">
+        <div className="space-y-2 border-t border-border-subtle px-5 py-4">
+          <Link href="/" className="block text-xs text-muted-foreground hover:text-foreground">
             ← Дэлгүүр рүү буцах
           </Link>
+          <button
+            onClick={logout}
+            className="block text-xs text-muted-foreground hover:text-foreground"
+          >
+            Гарах
+          </button>
         </div>
       </aside>
       <main className="flex-1 overflow-auto p-8">{children}</main>

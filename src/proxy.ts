@@ -7,28 +7,31 @@ export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isAdmin = pathname.startsWith("/admin");
+  if (isAdmin && pathname === "/admin/login") return NextResponse.next();
+
   const isProtected = isAdmin || PROTECTED.some((p) => pathname.startsWith(p));
   if (!isProtected) return NextResponse.next();
 
-  const token = req.cookies.get("gainhub-token")?.value;
+  const loginPath = isAdmin ? "/admin/login" : "/login";
+  const token = req.cookies.get("myprotein-token")?.value;
   if (!token) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirect", pathname);
+    url.pathname = loginPath;
+    if (!isAdmin) url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
   const session = await verifyToken(token);
   if (!session) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirect", pathname);
+    url.pathname = loginPath;
+    if (!isAdmin) url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
   if (isAdmin && !session.isAdmin) {
     const url = req.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
 

@@ -47,12 +47,12 @@ const sections: Section[] = [
     content: (
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          <strong>GainHub</strong> ХХК-ийн албан ёсны цахим худалдааны вэб
-          сайт <strong>gainhub.mn</strong> нь уураг, креатин, дасгалын өмнөх
+          <strong>MyProtein Mongolia</strong> ХХК-ийн албан ёсны цахим худалдааны вэб
+          сайт <strong>myproteinmongolia.mn</strong> нь уураг, креатин, дасгалын өмнөх
           болон спортын бусад нэмэлт тэжээлийг онлайнаар борлуулдаг платформ юм.
         </li>
         <li>
-          Энэхүү үйлчилгээний нөхцөл нь <strong>gainhub.mn</strong> вэб
+          Энэхүү үйлчилгээний нөхцөл нь <strong>myproteinmongolia.mn</strong> вэб
           сайтаар бараа бүтээгдэхүүн худалдан авахтай холбоотой харилцааг
           зохицуулна.
         </li>
@@ -70,7 +70,7 @@ const sections: Section[] = [
           дагуу үйлчилгээг ашиглана.
         </li>
         <li>
-          <strong>GainHub</strong> ХХК нь үйлчилгээний нөхцөлийг өөрчлөх
+          <strong>MyProtein Mongolia</strong> ХХК нь үйлчилгээний нөхцөлийг өөрчлөх
           эрхтэй бөгөөд өөрчлөлтийг вэб сайтад нийтэлснээр хүчин төгөлдөр
           болно.
         </li>
@@ -92,7 +92,7 @@ const sections: Section[] = [
         </li>
         <li>
           Нэг хэрэглэгч зөвхөн нэг бүртгэлтэй байна. Давхардсан бүртгэлийг
-          <strong> GainHub</strong> цуцлах эрхтэй.
+          <strong> MyProtein Mongolia</strong> цуцлах эрхтэй.
         </li>
         <li>
           Хэрэглэгч холбоо барих утасны дугаар болон и-мэйл хаягаа үнэн зөв
@@ -100,7 +100,7 @@ const sections: Section[] = [
         </li>
         <li>
           Хэрэглэгч өөрийн бүртгэлийг хэзээ ч устгах хүсэлт гаргах
-          боломжтой. Хүсэлтийг <a href="mailto:info@gainhub.mn" className="text-brand underline">info@gainhub.mn</a>-д
+          боломжтой. Хүсэлтийг <a href="mailto:info@myproteinmongolia.mn" className="text-brand underline">info@myproteinmongolia.mn</a>-д
           илгээнэ үү.
         </li>
       </ul>
@@ -124,7 +124,7 @@ const sections: Section[] = [
         <li>
           Захиалга баталгаажсаны дараа цуцлах хүсэлтийг ажлын цагт
           утсаар <a href="tel:77100100" className="text-brand underline">77100100</a> эсвэл и-мэйлээр{" "}
-          <a href="mailto:info@gainhub.mn" className="text-brand underline">info@gainhub.mn</a>-д
+          <a href="mailto:info@myproteinmongolia.mn" className="text-brand underline">info@myproteinmongolia.mn</a>-д
           илгээнэ үү. Бараа хүргэлтэнд гарсаны дараа цуцлах боломжгүй.
         </li>
         <li>
@@ -139,7 +139,7 @@ const sections: Section[] = [
     content: (
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          <strong>GainHub</strong> нь захиалгын нийт үнийн дүнг 100 хувь
+          <strong>MyProtein Mongolia</strong> нь захиалгын нийт үнийн дүнг 100 хувь
           урьдчилан төлүүлснээр захиалгыг баталгаажуулна.
         </li>
         <li>
@@ -159,7 +159,7 @@ const sections: Section[] = [
         <li>
           Үнийн дүн болон мэдээллийг вэб сайт дээр үнэн зөв харуулахыг
           хичээдэг боловч техникийн алдааны улмаас зөрүү гарсан тохиолдолд
-          <strong> GainHub</strong> захиалгыг цуцлах буюу хэрэглэгчтэй
+          <strong> MyProtein Mongolia</strong> захиалгыг цуцлах буюу хэрэглэгчтэй
           зөвшилцөх эрхтэй.
         </li>
       </ul>
@@ -170,8 +170,8 @@ const sections: Section[] = [
     content: (
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          <strong>GainHub</strong> нэр, лого, загвар, вэб сайтын дизайн болон
-          контент нь <strong>GainHub</strong> ХХК-ийн оюуны өмч бөгөөд хуулиар
+          <strong>MyProtein Mongolia</strong> нэр, лого, загвар, вэб сайтын дизайн болон
+          контент нь <strong>MyProtein Mongolia</strong> ХХК-ийн оюуны өмч бөгөөд хуулиар
           хамгаалагдсан.
         </li>
         <li>
@@ -183,7 +183,7 @@ const sections: Section[] = [
           харгалзах брэнд болон нийлүүлэгч байгуулллага эзэмшинэ.
         </li>
         <li>
-          <strong>GainHub</strong>-ын нэрийг хуурамч сурталчилгаа, мэдээлэл
+          <strong>MyProtein Mongolia</strong>-ын нэрийг хуурамч сурталчилгаа, мэдээлэл
           тараах зорилгоор ашиглахыг хориглоно.
         </li>
       </ul>
@@ -231,7 +231,7 @@ const sections: Section[] = [
         <li>
           Буцаалтын хүсэлтийг бараа хүлээн авснаас хойш <strong>48 цагийн</strong>{" "}
           дотор <a href="tel:77100100" className="text-brand underline">77100100</a> дугаар
-          эсвэл <a href="mailto:info@gainhub.mn" className="text-brand underline">info@gainhub.mn</a>-д
+          эсвэл <a href="mailto:info@myproteinmongolia.mn" className="text-brand underline">info@myproteinmongolia.mn</a>-д
           мэдэгдэнэ.
         </li>
         <li>
@@ -248,7 +248,7 @@ const sections: Section[] = [
         </li>
         <li>
           Хэрэглэгч барааг сайтар судлалгүйгээс болж хийсэн буцаалтын
-          хүсэлтийг <strong>GainHub</strong> хүлээн авахгүй байж болохыг
+          хүсэлтийг <strong>MyProtein Mongolia</strong> хүлээн авахгүй байж болохыг
           анхаарна уу — бараа бүтээгдэхүүний дэлгэрэнгүй мэдээллийг
           захиалахаасаа өмнө сайтар уншина уу.
         </li>

@@ -1,7 +1,7 @@
 import React from "react";
 
 export const metadata = {
-  title: "Хүргэлтийн нөхцөл — GainHub",
+  title: "Хүргэлтийн нөхцөл — MyProtein Mongolia",
 };
 
 const content = `**Хүргэлтийн нөхцөл**

@@ -32,7 +32,7 @@ type CartState = {
 };
 
 const CartContext = createContext<CartState | null>(null);
-const STORAGE_KEY = "gainhub-cart";
+const STORAGE_KEY = "myprotein-cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);

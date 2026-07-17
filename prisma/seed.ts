@@ -58,6 +58,21 @@ async function main() {
       isAdmin: true,
     },
   });
+  
+  await db.promotionSetting.upsert({
+    where: { id: "default" },
+    update: {},
+    create: {
+      id: "default",
+      isActive: false,
+      title: "Хүслээ цэнэглэ",
+      description: "Эхний захиалгадаа 15% хямдрал аваарай! Шинэ хэрэглэгчдэд зориулсан онцгой урамшуулал.",
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      discountCode: "WELCOME15",
+      discountValue: "15%",
+    },
+  });
 
   console.log("Seed complete.");
 }

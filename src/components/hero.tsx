@@ -1,117 +1,79 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CreditCard, Phone, ShieldCheck, Truck } from "lucide-react";
-import { categories, products } from "@/lib/data";
+import { ArrowRight } from "lucide-react";
+import { formatPrice, getProduct } from "@/lib/data";
 
-const QUICK_CATS = ["whey", "creatine", "preworkout", "bcaa"];
-
-const VALUE_PROPS = [
-  { icon: Truck,       title: "Шуурхай хүргэлт",    sub: "Улаанбаатарт 24–48 цаг" },
-  { icon: ShieldCheck, title: "100% Original",       sub: "Лабораторийн баталгаатай" },
-  { icon: CreditCard,  title: "Хялбар төлбөр",      sub: "Банкны шилжүүлэг"       },
-  { icon: Phone,       title: "Лавлах утас",         sub: "77100100 — өдөр бүр"    },
-];
+const HERO_PRODUCT_ID = "gh-1001";
 
 export function Hero() {
-  const catTiles = QUICK_CATS
-    .map((slug) => {
-      const cat   = categories.find((c) => c.slug === slug);
-      const image = products.find((p) => p.categorySlug === slug)?.image;
-      return cat && image ? { ...cat, image } : null;
-    })
-    .filter((t): t is { slug: string; name: string; image: string } => t !== null);
+  const heroProduct = getProduct(HERO_PRODUCT_ID);
+  const discount =
+    heroProduct?.originalPrice
+      ? Math.round((1 - heroProduct.price / heroProduct.originalPrice) * 100)
+      : 0;
 
   return (
-    <div className="mx-auto max-w-[1280px] space-y-3 px-4 pt-4">
-
-      {/* ── Main hero ─────────────────────────────────────────── */}
-      <div className="flex min-h-[300px] flex-col overflow-hidden rounded-lg bg-ink sm:flex-row sm:min-h-[340px]">
-
+    <div className="bg-shop-black">
+      <div className="mx-auto grid max-w-[1280px] gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-8">
         {/* Left — headline + CTAs */}
-        <div className="flex flex-col justify-center gap-5 px-8 py-10 sm:w-[54%] sm:px-12">
+        <div className="order-2 lg:order-1">
+          <span className="inline-block bg-brand px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white">
+            Шинэ ирэлт · MP-2026
+          </span>
 
-          {/* Live badge */}
-          <div className="inline-flex w-fit items-center gap-2 rounded border border-white/10 bg-white/8 px-3 py-1 text-xs text-white/60">
-            <span className="size-1.5 rounded-full bg-brand" />
-            Улаанбаатарт 24–48 цагт хүргэнэ
-          </div>
+          <h1 className="mt-5 font-display text-[clamp(2.75rem,7vw,5.25rem)] font-bold uppercase leading-[0.92] tracking-normal text-white">
+            Дараагийн PR-аа
+            <br />
+            <span className="text-brand">Энд эхэл.</span>
+          </h1>
 
-          {/* Headline */}
-          <div>
-            <h1 className="text-[clamp(1.75rem,4vw,3rem)] font-bold leading-[1.15] tracking-tight text-white">
-              Дараагийн PR-аа<br />
-              <span className="text-brand">GainHub</span>-аар эхлүүл
-            </h1>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/50 sm:text-[0.9375rem]">
-              Whey уураг, креатин, дасгалын өмнөх, амин хүчил —<br className="hidden sm:block" />
-              дэлхийн шилдэг брэндүүд боломжийн үнээр.
-            </p>
-          </div>
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/50">
+            Лабораторийн шалгалттай whey уураг, креатин, дасгалын өмнөх —
+            100% original, Улаанбаатарт 24–48 цагт хүргэнэ.
+          </p>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/product"
-              className="flex items-center gap-2 rounded-lg bg-brand px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
+              className="flex items-center gap-2 bg-brand px-7 py-3.5 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-brand-hover"
             >
               Бараа үзэх <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/product?filter=sale"
-              className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/8 px-6 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:bg-white/15"
+              className="flex items-center gap-2 border border-white/25 px-7 py-3.5 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-white/10"
             >
               Хямдралтай бараа
             </Link>
           </div>
         </div>
 
-        {/* Right — 2×2 category image grid */}
-        <div className="grid grid-cols-2 gap-2 p-3 sm:w-[46%] sm:p-4">
-          {catTiles.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/product?category=${cat.slug}`}
-              className="group relative overflow-hidden rounded-lg"
-            >
-              <div className="relative aspect-[4/3]">
+        {/* Right — hero product on a pedestal */}
+        {heroProduct && (
+          <div className="order-1 lg:order-2">
+            <div className="relative mx-auto aspect-square max-w-[420px] bg-gradient-to-b from-white/[0.07] to-transparent p-10">
+              <div className="relative size-full">
                 <Image
-                  src={cat.image}
-                  alt={cat.name}
+                  src={heroProduct.image}
+                  alt={heroProduct.name}
                   fill
-                  sizes="(max-width:640px) 50vw, 23vw"
-                  className="object-cover brightness-75 transition-all duration-500 group-hover:brightness-90 group-hover:scale-105"
+                  sizes="(max-width:1024px) 80vw, 420px"
+                  className="object-contain drop-shadow-[0_30px_40px_rgba(0,0,0,0.5)]"
+                  priority
                 />
-                {/* gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                {/* label */}
-                <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between p-2.5 sm:p-3">
-                  <span className="text-xs font-semibold text-white drop-shadow sm:text-sm">{cat.name}</span>
-                  <ArrowRight className="size-3.5 text-white/60 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white" />
-                </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Value-props strip ──────────────────────────────────── */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {VALUE_PROPS.map(({ icon: Icon, title, sub }) => (
-          <div
-            key={title}
-            className="flex items-center gap-3 rounded-lg border border-border-subtle bg-background px-4 py-3"
-          >
-            <div className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand/10 text-brand">
-              <Icon className="size-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">{title}</p>
-              <p className="truncate text-xs text-muted-foreground">{sub}</p>
+              {discount > 0 && (
+                <div className="absolute bottom-4 left-4 bg-brand px-3 py-2 text-sm font-black uppercase tracking-wide text-white">
+                  -{discount}% онцлох
+                </div>
+              )}
+              <div className="absolute right-4 top-4 border border-white/20 bg-shop-black/80 px-2.5 py-1 text-[11px] font-semibold text-white/70">
+                {formatPrice(heroProduct.price)}
+              </div>
             </div>
           </div>
-        ))}
+        )}
       </div>
-
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import type { CartLine } from "@/components/cart-context";
 
 export const BANK_ACCOUNTS = [
-  { bank: "Хаан банк", account: "5000 1234 5678", name: "GainHub ХХК" },
-  { bank: "Голомт банк", account: "1234 5678 9012", name: "GainHub ХХК" },
+  { bank: "Хаан банк", account: "5000 1234 5678", name: "MyProtein Mongolia ХХК" },
+  { bank: "Голомт банк", account: "1234 5678 9012", name: "MyProtein Mongolia ХХК" },
 ];
 
 export const DELIVERY_FEE = 6600; // Дотоодын хүргэлт

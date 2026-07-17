@@ -1,6 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
 
-export const COOKIE_NAME = "gainhub-token";
+export const COOKIE_NAME = "myprotein-token";
 
 export function authCookieOptions() {
   return {
@@ -14,7 +14,7 @@ export function authCookieOptions() {
 
 function getSecret() {
   return new TextEncoder().encode(
-    process.env.AUTH_SECRET ?? "gainhub-dev-secret"
+    process.env.AUTH_SECRET ?? "myprotein-dev-secret"
   );
 }
 

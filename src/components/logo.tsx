@@ -1,12 +1,16 @@
 import Link from "next/link";
 
 export function Logo({ className = "" }: { className?: string }) {
+  // Determine if we should use the white text version for a dark background (e.g., in footer)
+  const isDarkContext = className.includes("text-white") || className.includes("white");
+
   return (
-    <Link href="/" className={`flex items-center gap-0.5 ${className}`}>
-      <span className="text-2xl font-extrabold leading-none flex items-center gap-0.5">
-        <span className="text-foreground">Gain</span>
-        <span className="rounded bg-brand px-1.5 py-0.5 text-white">Hub</span>
-      </span>
+    <Link href="/" className={`inline-flex items-center ${className}`}>
+      <img
+        src={isDarkContext ? "/logo-white.png" : "/logo.png"}
+        alt="Myprotein Mongolia"
+        className="h-[38px] w-auto object-contain"
+      />
     </Link>
   );
 }

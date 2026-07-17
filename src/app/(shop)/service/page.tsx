@@ -2,9 +2,9 @@ import { FileText } from "lucide-react";
 import { TermsAccordion } from "./terms-accordion";
 
 export const metadata = {
-  title: "Үйлчилгээний нөхцөл — GainHub",
+  title: "Үйлчилгээний нөхцөл — MyProtein Mongolia",
   description:
-    "GainHub цахим худалдааны вэб сайтын үйлчилгээний нөхцөл, хэрэглэгчийн эрх үүрэг.",
+    "MyProtein Mongolia цахим худалдааны вэб сайтын үйлчилгээний нөхцөл, хэрэглэгчийн эрх үүрэг.",
 };
 
 export default function TermsPage() {
@@ -25,7 +25,7 @@ export default function TermsPage() {
           Сүүлд шинэчлэгдсэн: 2026 оны 06 дугаар сарын 13
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed border-l-2 border-brand pl-4">
-          Та <strong>gainhub.mn</strong>-д нэвтрэх болон худалдан авалт хийхдээ
+          Та <strong>myproteinmongolia.mn</strong>-д нэвтрэх болон худалдан авалт хийхдээ
           доорх үйлчилгээний нөхцөлийг хүлээн зөвшөөрсөнд тооцно. Аливаа
           асуудал үүссэн тохиолдолд манай баг тантай холбогдоно.
         </p>
@@ -48,10 +48,10 @@ export default function TermsPage() {
             77100100
           </a>
           <a
-            href="mailto:info@gainhub.mn"
+            href="mailto:info@myproteinmongolia.mn"
             className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-white px-4 py-2 text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
           >
-            info@gainhub.mn
+            info@myproteinmongolia.mn
           </a>
         </div>
       </div>
