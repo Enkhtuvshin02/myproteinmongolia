@@ -23,7 +23,7 @@ export function OrderSummary({
   cta?: Cta;
   secondary?: { label: string; href?: string; onClick?: () => void };
 }) {
-  const { delivery, ecoBag, total } = computeTotals(subtotal, discount);
+  const { delivery, total } = computeTotals(subtotal, discount);
   const grandTotal = showFees ? total : Math.max(0, subtotal - discount);
 
   return (
@@ -60,16 +60,10 @@ export function OrderSummary({
           </div>
         )}
         {showFees && (
-          <>
-            <div className="flex justify-between">
-              <dt className="text-muted-foreground">Дотоодын хүргэлт</dt>
-              <dd className="font-medium">{formatPrice(delivery)}</dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-muted-foreground">Хүргэлтийн эко уут</dt>
-              <dd className="font-medium">{formatPrice(ecoBag)}</dd>
-            </div>
-          </>
+          <div className="flex justify-between">
+            <dt className="text-muted-foreground">Дотоодын хүргэлт</dt>
+            <dd className="font-medium">{formatPrice(delivery)}</dd>
+          </div>
         )}
       </dl>
 

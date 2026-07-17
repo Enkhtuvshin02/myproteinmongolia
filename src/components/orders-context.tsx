@@ -13,11 +13,11 @@ import type { CartLine } from "@/components/cart-context";
 import { useAccount } from "@/components/account-context";
 
 type PlaceOrderInput = OrderDraft & {
+  id: string;
   items: CartLine[];
   subtotal: number;
   discount: number;
   delivery: number;
-  ecoBag: number;
   total: number;
 };
 
@@ -26,7 +26,6 @@ type OrdersState = {
   hydrated: boolean;
   placeOrder: (draft: PlaceOrderInput) => Promise<Order>;
   getOrder: (id: string) => Order | undefined;
-  attachReceipt: (id: string, receiptImageUrl: string) => Promise<void>;
   refreshOrders: () => Promise<void>;
 };
 
@@ -62,18 +61,6 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     return order;
   };
 
-  const attachReceipt = async (id: string, receiptImageUrl: string) => {
-    const res = await fetch(`/api/orders/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ receiptImageUrl }),
-    });
-    if (res.ok) {
-      const updated: Order = await res.json();
-      setOrders((prev) => prev.map((o) => (o.id === id ? updated : o)));
-    }
-  };
-
   return (
     <OrdersContext.Provider
       value={{
@@ -81,7 +68,6 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
         hydrated,
         placeOrder,
         getOrder: (id) => orders.find((o) => o.id === id),
-        attachReceipt,
         refreshOrders,
       }}
     >

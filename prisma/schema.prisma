@@ -166,7 +166,6 @@ model Order {
   subtotal        Float
   discount        Float               @default(0)
   delivery        Float
-  ecoBag          Float
   total           Float
   status          OrderStatus         @default(NEW)
 

@@ -6,15 +6,14 @@ export const BANK_ACCOUNTS = [
 ];
 
 export const DELIVERY_FEE = 6600; // Дотоодын хүргэлт
-export const ECO_BAG_FEE = 380; // Баглаа боодлын хураамж
 
 export type OrderStatus = "NEW" | "PAID" | "ON_THE_WAY" | "COMPLETED" | "CANCELED";
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
-  NEW: "Шинэ",
+  NEW: "Төлбөр хүлээгдэж буй",
   PAID: "Төлөгдсөн",
   ON_THE_WAY: "Хүргэлтэнд гарсан",
-  COMPLETED: "Амжилттай",
+  COMPLETED: "Хүргэгдсэн",
   CANCELED: "Цуцлагдсан",
 };
 
@@ -39,16 +38,14 @@ export type Order = OrderDraft & {
   subtotal: number;
   discount: number;
   delivery: number;
-  ecoBag: number;
   total: number;
   status: OrderStatus;
 };
 
 export function computeTotals(subtotal: number, discount = 0) {
   const delivery = subtotal > 0 ? DELIVERY_FEE : 0;
-  const ecoBag = subtotal > 0 ? ECO_BAG_FEE : 0;
-  const total = Math.max(0, subtotal - discount) + delivery + ecoBag;
-  return { delivery, ecoBag, total };
+  const total = Math.max(0, subtotal - discount) + delivery;
+  return { delivery, total };
 }
 
 export function generateOrderId() {

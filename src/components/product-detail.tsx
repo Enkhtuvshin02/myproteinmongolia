@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Heart, Minus, Plus, ShoppingCart, ShieldCheck, Truck, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import type { Product, ProductVariant } from "@/lib/types";
@@ -9,7 +10,8 @@ import { categoryName, formatPrice } from "@/lib/data";
 import { useCart } from "./cart-context";
 
 export function ProductDetail({ product }: { product: Product }) {
-  const { add, openCart } = useCart();
+  const { add, closeCart } = useCart();
+  const router = useRouter();
   const [qty, setQty] = useState(1);
 
   // Live variant selection
@@ -195,11 +197,10 @@ export function ProductDetail({ product }: { product: Product }) {
                     key={flavor}
                     type="button"
                     onClick={() => handleFlavorSelect(flavor)}
-                    className={`border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                      activeFlavor === flavor
+                    className={`border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${activeFlavor === flavor
                         ? "border-brand bg-brand text-white shadow-sm"
                         : "border-shop-line text-foreground/80 bg-white hover:border-shop-black"
-                    }`}
+                      }`}
                   >
                     {flavor}
                   </button>
@@ -220,11 +221,10 @@ export function ProductDetail({ product }: { product: Product }) {
                     key={weight}
                     type="button"
                     onClick={() => handleWeightSelect(weight)}
-                    className={`border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                      activeWeight === weight
+                    className={`border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${activeWeight === weight
                         ? "border-brand bg-brand text-white shadow-sm"
                         : "border-shop-line text-foreground/80 bg-white hover:border-shop-black"
-                    }`}
+                      }`}
                   >
                     {weight}
                   </button>
@@ -239,7 +239,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="flex items-center gap-4">
               <span className="text-xs text-muted-foreground font-mono">
                 {stock > 0 ? (
-                  <span className="text-success font-semibold">Бэлэн байна (Үлдэгдэл {stock})</span>
+                  <span className="text-success font-semibold">Үлдэгдэл {stock}</span>
                 ) : (
                   <span className="text-sale font-semibold">Дууссан</span>
                 )}
@@ -281,7 +281,8 @@ export function ProductDetail({ product }: { product: Product }) {
               onClick={() => {
                 if (stock > 0) {
                   addToCart();
-                  openCart();
+                  closeCart();
+                  router.push("/checkout");
                 }
               }}
               disabled={stock <= 0}
@@ -356,7 +357,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     <tr className="border-b border-shop-black">
                       <th className="py-2.5 font-bold uppercase text-shop-black">Үзүүлэлт</th>
                       <th className="py-2.5 text-right font-bold uppercase text-shop-black">100 граммд</th>
-                      <th className="py-2.5 text-right font-bold uppercase text-shop-black">Порцоор</th>
+                      <th className="py-2.5 text-right font-bold uppercase text-shop-black">Тун тутамд</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-shop-line">

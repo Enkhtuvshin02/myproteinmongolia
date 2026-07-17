@@ -15,7 +15,21 @@ export async function GET(req: NextRequest) {
       ...(filter === "sale" ? { originalPrice: { not: null } } : {}),
       ...(q ? { name: { contains: q, mode: "insensitive" } } : {}),
     },
-    include: { category: true, flavors: true },
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      originalPrice: true,
+      image: true,
+      categorySlug: true,
+      rating: true,
+      stock: true,
+      isNew: true,
+      isFeatured: true,
+      isBundle: true,
+      unit: true,
+      flavors: true,
+    },
     orderBy: { id: "asc" },
   });
 

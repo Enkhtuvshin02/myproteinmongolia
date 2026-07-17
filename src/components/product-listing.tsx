@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { categories, categoryName } from "@/lib/data";
 import type { Product } from "@/lib/types";
 import { ProductCard } from "./product-card";
+import { Spinner } from "@/components/ui/spinner";
 
 const filterChips = [
   { key: "featured", label: "Онцлох" },
@@ -25,16 +26,22 @@ export function ProductListing() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const controller = new AbortController();
     setLoading(true);
     const sp = new URLSearchParams();
     if (category) sp.set("category", category);
     if (filter) sp.set("filter", filter);
     if (q) sp.set("q", q);
-    fetch(`/api/products${sp.toString() ? `?${sp}` : ""}`)
+    fetch(`/api/products${sp.toString() ? `?${sp}` : ""}`, { signal: controller.signal })
       .then((r) => r.json())
       .then((data: Product[]) => setAllProducts(data))
-      .catch(() => setAllProducts([]))
-      .finally(() => setLoading(false));
+      .catch((e) => {
+        if (e.name !== "AbortError") setAllProducts([]);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
   }, [category, filter, q]);
 
   const list = useMemo(() => {
@@ -126,7 +133,7 @@ export function ProductListing() {
           </div>
 
           {loading ? (
-            <p className="py-20 text-center text-muted-foreground">Уншиж байна…</p>
+            <Spinner />
           ) : list.length === 0 ? (
             <p className="py-20 text-center text-muted-foreground">Бүтээгдэхүүн олдсонгүй.</p>
           ) : (

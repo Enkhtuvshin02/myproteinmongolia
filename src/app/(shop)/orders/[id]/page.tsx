@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
-import { CheckCircle2, Landmark, Package, Truck, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Package, Truck, XCircle } from "lucide-react";
 import { useOrders } from "@/components/orders-context";
 import { CheckoutSteps } from "@/components/checkout/checkout-steps";
-import { BankAccountDetails } from "@/components/checkout/bank-account-details";
 import { formatPrice } from "@/lib/data";
 import { districtLabel } from "@/lib/mn-address";
 import { ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/checkout";
+import { Spinner } from "@/components/ui/spinner";
 
 function fmtDate(ts: number) {
   const d = new Date(ts);
@@ -19,8 +18,40 @@ function fmtDate(ts: number) {
   return `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
+// ponytail: fixed 24h payment window, display-only (no auto-cancel job behind it yet)
+const PAYMENT_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+function fmtDuration(ms: number) {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const p = (n: number) => n.toString().padStart(2, "0");
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+  return `${p(days)} өдөр : ${p(hours)} цаг : ${p(mins)} мин : ${p(secs)} сек`;
+}
+
+function PaymentCountdown({ createdAt }: { createdAt: number }) {
+  const deadline = createdAt + PAYMENT_WINDOW_MS;
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const remaining = deadline - now;
+  if (remaining <= 0) return null;
+
+  return (
+    <p className="text-sm text-muted-foreground">
+      Төлбөр төлөх хугацаа: <span className="font-semibold text-foreground">{fmtDuration(remaining)}</span>
+    </p>
+  );
+}
+
 const STATUS_ICON: Record<OrderStatus, React.ReactNode> = {
-  NEW: <Landmark className="size-12 text-rating" />,
+  NEW: <Clock className="size-12 text-rating" />,
   PAID: <CheckCircle2 className="size-12 text-success" />,
   ON_THE_WAY: <Truck className="size-12 text-brand" />,
   COMPLETED: <CheckCircle2 className="size-12 text-success" />,
@@ -29,8 +60,7 @@ const STATUS_ICON: Record<OrderStatus, React.ReactNode> = {
 
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { getOrder, hydrated, refreshOrders, attachReceipt } = useOrders();
-  const [uploading, setUploading] = useState(false);
+  const { getOrder, hydrated, refreshOrders } = useOrders();
 
   useEffect(() => {
     if (hydrated && !getOrder(id)) {
@@ -43,7 +73,7 @@ export default function OrderDetailPage() {
   const order = getOrder(id);
 
   if (!hydrated) {
-    return <div className="mx-auto max-w-[1000px] px-4 py-16 text-center text-muted-foreground">Уншиж байна…</div>;
+    return <Spinner />;
   }
   if (!order) {
     return (
@@ -63,9 +93,7 @@ export default function OrderDetailPage() {
         <div className="flex flex-col items-center gap-2 py-2 text-center">
           {STATUS_ICON[order.status]}
           <p className="text-xl font-bold">{ORDER_STATUS_LABELS[order.status]}</p>
-          {order.status === "NEW" && (
-            <p className="text-sm text-muted-foreground">Доор дурдсан дансанд шилжүүлэг хийж, баримтын зурган хуулбарыг хавсаргана уу.</p>
-          )}
+          {order.status === "NEW" && <PaymentCountdown createdAt={order.createdAt} />}
           {order.status === "CANCELED" && (
             <Link href="/product" className="mt-2 rounded-lg bg-brand px-5 py-2 text-sm font-semibold text-brand-foreground hover:bg-brand-hover">
               Дэлгүүр хэсэх
@@ -73,54 +101,6 @@ export default function OrderDetailPage() {
           )}
         </div>
       </div>
-
-      {/* bank transfer + receipt upload */}
-      {order.status === "NEW" && (
-        <div className="mb-4 rounded-card border border-border-subtle p-6">
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-bold">
-            <Landmark className="size-5 text-brand" /> Банкны шилжүүлэг
-          </h2>
-          <BankAccountDetails amount={order.total} orderId={order.id} />
-
-          <div className="mt-5 border-t border-border-subtle pt-5">
-            <h3 className="mb-2 text-sm font-semibold">Гүйлгээний баримт хавсаргах</h3>
-            {order.receiptImageUrl ? (
-              <div className="flex items-center gap-3">
-                <div className="relative size-20 overflow-hidden rounded-lg border border-border-subtle">
-                  <Image src={order.receiptImageUrl} alt="Баримт" fill sizes="80px" className="object-cover" />
-                </div>
-                <p className="text-sm text-success">Баримт амжилттай хавсаргагдлаа. Бид удахгүй шалгаж баталгаажуулна.</p>
-              </div>
-            ) : (
-              <CldUploadWidget
-                uploadPreset={undefined}
-                signatureEndpoint="/api/sign-upload"
-                onSuccess={(result) => {
-                  const info = result.info as { secure_url: string };
-                  if (info?.secure_url) {
-                    setUploading(true);
-                    attachReceipt(order.id, info.secure_url).finally(() => setUploading(false));
-                  }
-                }}
-                options={{ maxFiles: 1, resourceType: "image", folder: "myprotein/receipts" }}
-              >
-                {({ open }) => (
-                  <label className="flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-border-subtle py-6 text-sm text-muted-foreground hover:border-brand hover:text-brand">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onClick={(e) => { e.preventDefault(); open(); }}
-                      disabled={uploading}
-                    />
-                    {uploading ? "Хуулж байна…" : "Гүйлгээний баримтын зураг оруулах"}
-                  </label>
-                )}
-              </CldUploadWidget>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* delivery details */}
       <div className="mb-4 rounded-card border border-border-subtle p-6">
@@ -143,7 +123,6 @@ export default function OrderDetailPage() {
           <div className="flex justify-between"><dt className="text-muted-foreground">Бараа дүн</dt><dd>{formatPrice(order.subtotal)}</dd></div>
           {order.discount > 0 && <div className="flex justify-between text-sale"><dt>Хөнгөлөлт</dt><dd>-{formatPrice(order.discount)}</dd></div>}
           <div className="flex justify-between"><dt className="text-muted-foreground">Дотоодын хүргэлт</dt><dd>{formatPrice(order.delivery)}</dd></div>
-          <div className="flex justify-between"><dt className="text-muted-foreground">Баглаа боодол</dt><dd>{formatPrice(order.ecoBag)}</dd></div>
           <div className="flex justify-between border-t border-border-subtle pt-2 text-base font-bold"><dt>Нийт төлөх дүн</dt><dd>{formatPrice(order.total)}</dd></div>
         </dl>
       </div>

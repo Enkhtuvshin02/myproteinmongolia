@@ -64,9 +64,15 @@ export function BankAccountDetails({ amount, orderId }: { amount: number; orderI
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground">
-        Гүйлгээний утга дээр захиалгын дугаарыг бичнэ үү.
-      </p>
+      {orderId ? (
+        <p className="text-xs text-muted-foreground">
+          Гүйлгээний утга дээр дээрх захиалгын дугаарыг бичнэ үү.
+        </p>
+      ) : (
+        <p className="text-xs text-muted-foreground">
+          Захиалгыг баталгаажуулсны дараа гарах захиалгын дугаарыг гүйлгээний утга дээр бичнэ үү.
+        </p>
+      )}
     </div>
   );
 }

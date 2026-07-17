@@ -4,7 +4,7 @@ import { getSession } from "@/lib/auth-utils";
 
 function serializeOrder(o: {
   id: string; createdAt: Date; status: string; subtotal: number; discount: number;
-  delivery: number; ecoBag: number; total: number; paymentMethod: string; receiptImageUrl: string | null;
+  delivery: number; total: number; paymentMethod: string; receiptImageUrl: string | null;
   custFirstName: string; custLastName: string; phonePrimary: string; phoneSecondary: string;
   district: string; khoroo: string; detailedAddress: string;
   items: {
@@ -20,7 +20,6 @@ function serializeOrder(o: {
     subtotal: o.subtotal,
     discount: o.discount,
     delivery: o.delivery,
-    ecoBag: o.ecoBag,
     total: o.total,
     paymentMethod: o.paymentMethod,
     receiptImageUrl: o.receiptImageUrl ?? undefined,
@@ -59,30 +58,4 @@ export async function GET(
   });
   if (!order) return NextResponse.json(null, { status: 404 });
   return NextResponse.json(serializeOrder(order));
-}
-
-// Customer-facing PATCH: only lets the order's owner attach a bank-transfer
-// receipt screenshot. Status changes are admin-only (see /api/admin/orders/[id]).
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await getSession();
-  if (!session) return NextResponse.json(null, { status: 401 });
-  const { id } = await params;
-  const { receiptImageUrl } = await req.json();
-
-  if (typeof receiptImageUrl !== "string") {
-    return NextResponse.json({ error: "Invalid receiptImageUrl" }, { status: 400 });
-  }
-
-  const existing = await db.order.findFirst({ where: { id, userId: session.sub } });
-  if (!existing) return NextResponse.json(null, { status: 404 });
-
-  const updated = await db.order.update({
-    where: { id },
-    data: { receiptImageUrl },
-    include: { items: { include: { product: true } } },
-  });
-  return NextResponse.json(serializeOrder(updated));
 }

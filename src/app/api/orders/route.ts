@@ -11,7 +11,6 @@ function serializeOrder(o: Awaited<ReturnType<typeof fetchOrder>>) {
     subtotal: o.subtotal,
     discount: o.discount,
     delivery: o.delivery,
-    ecoBag: o.ecoBag,
     total: o.total,
     paymentMethod: o.paymentMethod,
     receiptImageUrl: o.receiptImageUrl ?? undefined,
@@ -69,11 +68,11 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const {
-    custFirstName, custLastName, phonePrimary, phoneSecondary, district, khoroo, detailedAddress,
-    items, subtotal, discount, delivery, ecoBag, total,
+    id: clientId, custFirstName, custLastName, phonePrimary, phoneSecondary, district, khoroo, detailedAddress,
+    items, subtotal, discount, delivery, total,
   } = body;
 
-  const id = generateOrderId();
+  const id = typeof clientId === "string" && clientId ? clientId : generateOrderId();
 
   const order = await db.order.create({
     data: {
@@ -89,7 +88,6 @@ export async function POST(req: NextRequest) {
       subtotal,
       discount: discount ?? 0,
       delivery,
-      ecoBag,
       total,
       status: "NEW",
       paymentMethod: "BANK_TRANSFER",
