@@ -133,17 +133,8 @@ async function main() {
     });
   }
 
-  console.log("Cleaning up previously imported products...");
-  // Myprotein IDs are numeric string IDs, whereas seed products start with 'gh-'
-  await db.product.deleteMany({
-    where: {
-      NOT: {
-        id: {
-          startsWith: "gh-",
-        },
-      },
-    },
-  });
+  console.log("Cleaning up all previous products...");
+  await db.product.deleteMany({});
 
   if (!fs.existsSync(JSONL_PATH)) {
     console.error(`File not found: ${JSONL_PATH}`);
@@ -250,7 +241,7 @@ async function main() {
         categorySlug: categorySlug,
         rating: 4.5 + Math.random() * 0.5, // 4.5 - 5.0 rating
         stock: sumStock,
-        isNew: false,
+        isNew: Math.random() > 0.85, // Mark 15% as new arrivals
         isFeatured: Math.random() > 0.85, // Mark 15% as featured
         isBundle: categorySlug === "bundle",
         unit: unit,

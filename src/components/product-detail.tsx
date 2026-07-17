@@ -120,7 +120,7 @@ export function ProductDetail({ product }: { product: Product }) {
       <div className="grid gap-10 grid-cols-1 lg:grid-cols-12 items-start">
         {/* left col: gallery */}
         <div className="lg:col-span-7 flex flex-col gap-4">
-          <div className="relative aspect-square bg-shop-paper border border-shop-line overflow-hidden transition-all duration-300">
+          <div className="relative aspect-square bg-white overflow-hidden transition-all duration-300">
             <Image
               src={image}
               alt={product.name}

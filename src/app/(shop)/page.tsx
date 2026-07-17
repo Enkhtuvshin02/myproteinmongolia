@@ -26,26 +26,16 @@ export default async function Home() {
     unit: p.unit ?? undefined,
   });
 
-  const [newestRaw, featuredRaw, heroProductRaw] = await Promise.all([
+  const [newestRaw, featuredRaw] = await Promise.all([
     db.product.findMany({ where: { isNew: true }, take: 8, include: { flavors: true } }),
     db.product.findMany({ where: { isFeatured: true }, take: 8, include: { flavors: true } }),
-    db.product.findFirst({
-      where: {
-        OR: [
-          { id: "10530943" }, // Signature Impact Whey Protein
-          { isFeatured: true },
-        ],
-      },
-      include: { flavors: true },
-    }),
   ]);
   const newest = newestRaw.map(toProduct);
   const featured = featuredRaw.map(toProduct);
-  const heroProduct = heroProductRaw ? toProduct(heroProductRaw) : null;
 
   return (
     <>
-      <Hero product={heroProduct} />
+      <Hero />
       <MarqueeStrip />
 
       <CategoryShowcase />
