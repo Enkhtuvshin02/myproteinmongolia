@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductForm from "../../ProductForm";
+import { Spinner } from "@/components/ui/spinner";
 
 type Product = {
   id: string;
@@ -13,10 +14,14 @@ type Product = {
   categorySlug: string;
   stock: number;
   unit: string | null;
+  brand: string | null;
   isNew: boolean;
   isFeatured: boolean;
   isBundle: boolean;
   flavors: { flavorName: string; stock: number }[];
+  descriptionAccordions: Record<string, string> | null;
+  nutritionTable: { parameter: string; per_100g?: string; per_serving?: string }[] | null;
+  nutritionNotice: string | null;
 };
 
 export default function EditProductPage() {
@@ -30,7 +35,7 @@ export default function EditProductPage() {
   }, [id]);
 
   if (!product) {
-    return <p className="text-sm text-muted-foreground">Уншиж байна...</p>;
+    return <Spinner />;
   }
 
   return (
@@ -46,10 +51,14 @@ export default function EditProductPage() {
           categorySlug: product.categorySlug,
           stock: String(product.stock),
           unit: product.unit ?? "",
+          brand: product.brand ?? "",
           isNew: product.isNew,
           isFeatured: product.isFeatured,
           isBundle: product.isBundle,
           flavors: product.flavors.map((f) => ({ flavorName: f.flavorName, stock: String(f.stock) })),
+          descriptionAccordions: Object.entries(product.descriptionAccordions ?? {}).map(([key, value]) => ({ key, value })),
+          nutritionTable: (product.nutritionTable ?? []).map((n) => ({ parameter: n.parameter, per_100g: n.per_100g ?? "", per_serving: n.per_serving ?? "" })),
+          nutritionNotice: product.nutritionNotice ?? "",
         }}
       />
     </div>

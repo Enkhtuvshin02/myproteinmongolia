@@ -5,6 +5,7 @@ import { Package } from "lucide-react";
 import { useOrders } from "@/components/orders-context";
 import { useAccount } from "@/components/account-context";
 import { SignInPrompt } from "@/components/auth/sign-in-prompt";
+import { Spinner } from "@/components/ui/spinner";
 import { formatPrice } from "@/lib/data";
 import { ORDER_STATUS_LABELS, type OrderStatus } from "@/lib/checkout";
 
@@ -35,7 +36,7 @@ export default function OrdersPage() {
       </h1>
 
       {!hydrated || !accountHydrated ? (
-        <p className="py-16 text-center text-muted-foreground">Уншиж байна…</p>
+        <Spinner />
       ) : orders.length === 0 ? (
         <div className="flex flex-col items-center gap-4 rounded-card border border-border-subtle py-20 text-center">
           <Package className="size-12 text-muted-foreground" />

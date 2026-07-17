@@ -7,6 +7,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { categories } from "@/lib/data";
 
 type FlavorRow = { flavorName: string; stock: string };
+type AccordionRow = { key: string; value: string };
+type NutritionRow = { parameter: string; per_100g: string; per_serving: string };
 
 type FormValues = {
   name: string;
@@ -16,10 +18,14 @@ type FormValues = {
   categorySlug: string;
   stock: string;
   unit: string;
+  brand: string;
   isNew: boolean;
   isFeatured: boolean;
   isBundle: boolean;
   flavors: FlavorRow[];
+  descriptionAccordions: AccordionRow[];
+  nutritionTable: NutritionRow[];
+  nutritionNotice: string;
 };
 
 type Props = {
@@ -35,10 +41,14 @@ const empty: FormValues = {
   categorySlug: categories[0].slug,
   stock: "0",
   unit: "",
+  brand: "",
   isNew: false,
   isFeatured: false,
   isBundle: false,
   flavors: [],
+  descriptionAccordions: [],
+  nutritionTable: [],
+  nutritionNotice: "",
 };
 
 export default function ProductForm({ productId, initial }: Props) {
@@ -47,11 +57,17 @@ export default function ProductForm({ productId, initial }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  const set = (field: keyof FormValues, value: string | boolean | FlavorRow[]) =>
+  const set = (field: keyof FormValues, value: string | boolean | FlavorRow[] | AccordionRow[] | NutritionRow[]) =>
     setValues((v) => ({ ...v, [field]: value }));
 
   const setFlavor = (i: number, patch: Partial<FlavorRow>) =>
     setValues((v) => ({ ...v, flavors: v.flavors.map((f, idx) => (idx === i ? { ...f, ...patch } : f)) }));
+
+  const setAccordion = (i: number, patch: Partial<AccordionRow>) =>
+    setValues((v) => ({ ...v, descriptionAccordions: v.descriptionAccordions.map((a, idx) => (idx === i ? { ...a, ...patch } : a)) }));
+
+  const setNutrition = (i: number, patch: Partial<NutritionRow>) =>
+    setValues((v) => ({ ...v, nutritionTable: v.nutritionTable.map((n, idx) => (idx === i ? { ...n, ...patch } : n)) }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,10 +88,18 @@ export default function ProductForm({ productId, initial }: Props) {
         categorySlug: values.categorySlug,
         stock: values.stock,
         unit: values.unit || null,
+        brand: values.brand || null,
         isNew: values.isNew,
         isFeatured: values.isFeatured,
         isBundle: values.isBundle,
         flavors: values.flavors.filter((f) => f.flavorName.trim()).map((f) => ({ flavorName: f.flavorName.trim(), stock: f.stock || 0 })),
+        descriptionAccordions: values.descriptionAccordions.some((a) => a.key.trim())
+          ? Object.fromEntries(values.descriptionAccordions.filter((a) => a.key.trim()).map((a) => [a.key.trim(), a.value]))
+          : null,
+        nutritionTable: values.nutritionTable.some((n) => n.parameter.trim())
+          ? values.nutritionTable.filter((n) => n.parameter.trim()).map((n) => ({ parameter: n.parameter.trim(), per_100g: n.per_100g || undefined, per_serving: n.per_serving || undefined }))
+          : null,
+        nutritionNotice: values.nutritionNotice || null,
       }),
     });
 
@@ -188,6 +212,15 @@ export default function ProductForm({ productId, initial }: Props) {
         </Field>
       </div>
 
+      <Field label="Брэнд">
+        <input
+          value={values.brand}
+          onChange={(e) => set("brand", e.target.value)}
+          className="w-full rounded-lg border border-border-subtle px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+          placeholder="Myprotein"
+        />
+      </Field>
+
       <Field label="Нөөц">
         <input
           type="number"
@@ -228,6 +261,84 @@ export default function ProductForm({ productId, initial }: Props) {
           >
             <Plus className="size-4" /> Амт нэмэх
           </button>
+        </div>
+      </Field>
+
+      <Field label="Тайлбарын хэсгүүд (Why choose, Description, FAQ гэх мэт)">
+        <div className="space-y-3">
+          {values.descriptionAccordions.map((a, i) => (
+            <div key={i} className="space-y-1.5 rounded-lg border border-border-subtle p-3">
+              <div className="flex gap-2">
+                <input
+                  value={a.key}
+                  onChange={(e) => setAccordion(i, { key: e.target.value })}
+                  placeholder="Гарчиг: WHY CHOOSE"
+                  className="flex-1 rounded-lg border border-border-subtle px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ink"
+                />
+                <button type="button" onClick={() => set("descriptionAccordions", values.descriptionAccordions.filter((_, idx) => idx !== i))} className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-sale">
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+              <textarea
+                value={a.value}
+                onChange={(e) => setAccordion(i, { value: e.target.value })}
+                placeholder="Агуулга..."
+                rows={3}
+                className="w-full rounded-lg border border-border-subtle px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => set("descriptionAccordions", [...values.descriptionAccordions, { key: "", value: "" }])}
+            className="flex items-center gap-1.5 text-sm text-brand hover:underline"
+          >
+            <Plus className="size-4" /> Хэсэг нэмэх
+          </button>
+        </div>
+      </Field>
+
+      <Field label="Шим тэжээллэг чанар">
+        <div className="space-y-2">
+          {values.nutritionTable.map((n, i) => (
+            <div key={i} className="flex gap-2">
+              <input
+                value={n.parameter}
+                onChange={(e) => setNutrition(i, { parameter: e.target.value })}
+                placeholder="Уураг"
+                className="flex-1 rounded-lg border border-border-subtle px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+              />
+              <input
+                value={n.per_100g}
+                onChange={(e) => setNutrition(i, { per_100g: e.target.value })}
+                placeholder="100г тутамд"
+                className="w-32 rounded-lg border border-border-subtle px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+              />
+              <input
+                value={n.per_serving}
+                onChange={(e) => setNutrition(i, { per_serving: e.target.value })}
+                placeholder="Тун тутамд"
+                className="w-32 rounded-lg border border-border-subtle px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+              />
+              <button type="button" onClick={() => set("nutritionTable", values.nutritionTable.filter((_, idx) => idx !== i))} className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-sale">
+                <Trash2 className="size-4" />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => set("nutritionTable", [...values.nutritionTable, { parameter: "", per_100g: "", per_serving: "" }])}
+            className="flex items-center gap-1.5 text-sm text-brand hover:underline"
+          >
+            <Plus className="size-4" /> Мөр нэмэх
+          </button>
+          <textarea
+            value={values.nutritionNotice}
+            onChange={(e) => set("nutritionNotice", e.target.value)}
+            placeholder="Тайлбар (жишээ нь: * Санал болгож буй өдөр тутмын хэрэглээ дээр үндэслэсэн)"
+            rows={2}
+            className="w-full rounded-lg border border-border-subtle px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink"
+          />
         </div>
       </Field>
 

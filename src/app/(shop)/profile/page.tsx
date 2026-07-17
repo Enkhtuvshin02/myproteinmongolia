@@ -6,6 +6,7 @@ import { MapPin, Package, Pencil, Plus, Star, Trash2, User as UserIcon, X } from
 import { useAccount } from "@/components/account-context";
 import { SignInPrompt } from "@/components/auth/sign-in-prompt";
 import { AddressFields, type SavedAddressInput } from "@/components/address-fields";
+import { Spinner } from "@/components/ui/spinner";
 
 type SavedAddr = { id: string; label: string; city: string; district: string; khoroo: string; detail: string; isDefault: boolean };
 
@@ -71,7 +72,7 @@ export default function ProfilePage() {
     fetch("/api/addresses").then((r) => r.json()).then(setAddresses).catch(() => {});
   }, [user]);
 
-  if (!hydrated) return <div className="mx-auto max-w-[800px] px-4 py-16 text-center text-muted-foreground">Уншиж байна…</div>;
+  if (!hydrated) return <Spinner />;
   if (!user) return <SignInPrompt redirect="/profile" />;
 
   const handleAdd = async (data: Omit<SavedAddr, "id">) => {

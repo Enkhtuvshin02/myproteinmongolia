@@ -4,12 +4,15 @@ export function Hero() {
   return (
     <Link
       href="/product"
-      className="relative block w-full select-none group border-b border-shop-line"
+      // 1. Added overflow-hidden to prevent the hover scale effect from spilling out
+      className="relative block w-full overflow-hidden select-none group border-b border-shop-line"
     >
       <img
         src="/hero-bg.png"
         alt="Myprotein Mongolia Banner"
-        className="w-full h-auto block transition-transform duration-700 group-hover:scale-[1.008]"
+        // 2. Removed `h-auto`
+        // 3. Added `aspect-[21/9]`, `object-cover`, and `object-top`
+        className="w-full aspect-[21/9] object-cover object-top block transition-transform duration-700 group-hover:scale-[1.008]"
         loading="eager"
       />
     </Link>

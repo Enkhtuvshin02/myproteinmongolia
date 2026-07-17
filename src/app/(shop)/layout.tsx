@@ -22,8 +22,8 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "MyProtein Mongolia — Уураг, спортын нэмэлт тэжээл",
-  description: "Whey уураг, креатин, дасгалын өмнөх, амин хүчил, иж бүрдэл — фитнесийн нэмэлт тэжээлийн цахим дэлгүүр",
+  title: "MyProtein Mongolia",
+  description: "Уураг, креатин, дасгалын өмнөх, амин хүчил, иж бүрдэл — фитнесийн нэмэлт тэжээлийн цахим дэлгүүр",
 };
 
 export default function RootLayout({

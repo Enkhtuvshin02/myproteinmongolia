@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/auth-utils";
 
@@ -8,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const { id } = await params;
   const body = await req.json();
-  const { name, price, originalPrice, image, categorySlug, stock, isNew, isFeatured, isBundle, unit, flavors } = body;
+  const { name, price, originalPrice, image, categorySlug, stock, isNew, isFeatured, isBundle, unit, brand, flavors, descriptionAccordions, nutritionTable, nutritionNotice } = body;
 
   if (Array.isArray(flavors)) {
     // Simplest correct approach for the admin form: replace all flavor rows wholesale.
@@ -33,6 +34,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       ...(isFeatured !== undefined && { isFeatured: Boolean(isFeatured) }),
       ...(isBundle !== undefined && { isBundle: Boolean(isBundle) }),
       ...(unit !== undefined && { unit: unit || null }),
+      ...(brand !== undefined && { brand: brand || null }),
+      ...(descriptionAccordions !== undefined && { descriptionAccordions: descriptionAccordions ?? Prisma.DbNull }),
+      ...(nutritionTable !== undefined && { nutritionTable: nutritionTable ?? Prisma.DbNull }),
+      ...(nutritionNotice !== undefined && { nutritionNotice: nutritionNotice || null }),
     },
     include: { flavors: true },
   });

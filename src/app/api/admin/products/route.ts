@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
-  const { name, price, originalPrice, image, categorySlug, stock, isNew, isFeatured, isBundle, unit, flavors } = body;
+  const { name, price, originalPrice, image, categorySlug, stock, isNew, isFeatured, isBundle, unit, brand, flavors, descriptionAccordions, nutritionTable, nutritionNotice } = body;
 
   if (!name || !price || !image || !categorySlug) {
     return NextResponse.json({ error: "Заавал бөглөх талбарууд дутуу байна." }, { status: 400 });
@@ -57,6 +57,10 @@ export async function POST(req: NextRequest) {
       isFeatured: Boolean(isFeatured),
       isBundle: Boolean(isBundle),
       unit: unit ?? null,
+      brand: brand ?? null,
+      descriptionAccordions: descriptionAccordions ?? undefined,
+      nutritionTable: nutritionTable ?? undefined,
+      nutritionNotice: nutritionNotice ?? null,
       flavors: Array.isArray(flavors) && flavors.length > 0
         ? { create: flavors.map((f: { flavorName: string; stock: number }) => ({ flavorName: f.flavorName, stock: Number(f.stock ?? 0) })) }
         : undefined,

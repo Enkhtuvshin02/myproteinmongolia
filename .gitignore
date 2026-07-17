@@ -53,3 +53,4 @@ next-env.d.ts
 
 # local db backups (contain data, never commit)
 /backups
+prisma/backups/

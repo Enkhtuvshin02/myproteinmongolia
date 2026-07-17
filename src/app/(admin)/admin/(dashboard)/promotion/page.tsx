@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CldUploadWidget } from "next-cloudinary";
+import { Spinner } from "@/components/ui/spinner";
 
 type Product = {
   id: string;
@@ -123,8 +124,7 @@ export default function AdminPromotionPage() {
   };
 
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Уншиж байна...</p>;
-  }
+    return <Spinner />;}
 
   return (
     <div className="max-w-2xl">
