@@ -50,3 +50,6 @@ next-env.d.ts
 
 # playwright test artifacts
 .playwright-mcp/
+
+# local db backups (contain data, never commit)
+/backups
