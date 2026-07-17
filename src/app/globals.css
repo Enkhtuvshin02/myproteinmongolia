@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/*
+ * GainHub design tokens — sharp, athletic, data-dense.
+ * Sports orange on charcoal/slate + stark white. No pastels, no soft radii.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #18181b;
+
+  /* GainHub sports-orange brand */
+  --brand: #ff5722;
+  --brand-hover: #e64a19;
+  --brand-foreground: #ffffff;
+
+  /* deep slate/charcoal — used for dark sections, admin chrome */
+  --ink: #0f172a;
+  --ink-soft: #1e293b;
+
+  --muted: #f1f1f3;
+  --muted-foreground: #52525b;
+  --border: #d4d4d8;
+
+  --sale: #dc2626;      /* discount badge */
+  --rating: #f59e0b;    /* star / pending */
+  --success: #16a34a;   /* in-stock / completed */
+
+  --radius: 0.375rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border-subtle: var(--border);
+  --color-sale: var(--sale);
+  --color-rating: var(--rating);
+  --color-success: var(--success);
+
+  --radius-card: var(--radius);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* thin scrollbar for the category strip */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--ink-soft);
+  border-radius: 9999px;
+}

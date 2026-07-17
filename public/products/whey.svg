@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#18181b"/>
+  <rect x="280" y="140" width="240" height="520" rx="18" fill="#27272a" stroke="#FF5722" stroke-width="6"/>
+  <rect x="280" y="140" width="240" height="90" rx="18" fill="#FF5722"/>
+  <circle cx="400" cy="185" r="26" fill="#18181b"/>
+  <text x="400" y="420" font-family="Arial, sans-serif" font-size="42" font-weight="800" fill="#FF5722" text-anchor="middle">WHEY</text>
+  <text x="400" y="470" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">PROTEIN</text>
+  <text x="400" y="600" font-family="Arial, sans-serif" font-size="16" fill="#a1a1aa" text-anchor="middle">GAINHUB</text>
+</svg>
