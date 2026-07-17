@@ -2,15 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/auth-utils";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await getAdminSession();
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const products = await db.product.findMany({
-    include: { category: true, flavors: true },
-    orderBy: { name: "asc" },
-  });
-  return NextResponse.json(products);
+  const { searchParams } = req.nextUrl;
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const pageSize = Math.min(1000, Math.max(1, Number(searchParams.get("pageSize")) || 30));
+
+  const [data, total] = await Promise.all([
+    db.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        originalPrice: true,
+        stock: true,
+        isNew: true,
+        isFeatured: true,
+        isBundle: true,
+        category: { select: { name: true } },
+      },
+      orderBy: { name: "asc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    db.product.count(),
+  ]);
+  return NextResponse.json({ data, total, page, pageSize });
 }
 
 export async function POST(req: NextRequest) {

@@ -10,14 +10,33 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const status = searchParams.get("status");
   const validStatus = status && status in OrderStatus ? (status as OrderStatus) : undefined;
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const pageSize = Math.min(200, Math.max(1, Number(searchParams.get("pageSize")) || 30));
+  const where = validStatus ? { status: validStatus } : undefined;
 
-  const orders = await db.order.findMany({
-    where: validStatus ? { status: validStatus } : undefined,
-    include: {
-      items: { include: { product: { select: { name: true } } } },
-      user: { select: { email: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  return NextResponse.json(orders);
+  const [data, total] = await Promise.all([
+    db.order.findMany({
+      where,
+      select: {
+        id: true,
+        createdAt: true,
+        status: true,
+        total: true,
+        custFirstName: true,
+        custLastName: true,
+        phonePrimary: true,
+        phoneSecondary: true,
+        district: true,
+        khoroo: true,
+        detailedAddress: true,
+        receiptImageUrl: true,
+        items: { select: { qty: true, product: { select: { name: true } } } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    db.order.count({ where }),
+  ]);
+  return NextResponse.json({ data, total, page, pageSize });
 }

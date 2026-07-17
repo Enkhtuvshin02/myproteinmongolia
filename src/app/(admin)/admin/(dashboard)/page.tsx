@@ -1,37 +1,23 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { db } from "@/lib/db";
 
-type Stats = {
-  products: number;
-  orders: number;
-  newCount: number;
-  onTheWay: number;
-};
+export const dynamic = "force-dynamic";
 
-export default function AdminDashboard() {
-  const [stats, setStats] = useState<Stats | null>(null);
+export default async function AdminDashboard() {
+  const [products, statusCounts] = await Promise.all([
+    db.product.count(),
+    db.order.groupBy({ by: ["status"], _count: true }),
+  ]);
 
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/admin/products").then((r) => r.json()),
-      fetch("/api/admin/orders").then((r) => r.json()),
-    ]).then(([products, orders]) => {
-      setStats({
-        products: products.length,
-        orders: orders.length,
-        newCount: orders.filter((o: { status: string }) => o.status === "NEW").length,
-        onTheWay: orders.filter((o: { status: string }) => o.status === "ON_THE_WAY").length,
-      });
-    });
-  }, []);
+  const countFor = (status: string) =>
+    statusCounts.find((r) => r.status === status)?._count ?? 0;
+  const orders = statusCounts.reduce((sum, r) => sum + r._count, 0);
 
   const cards = [
-    { label: "Нийт бүтээгдэхүүн", value: stats?.products, href: "/admin/products", color: "bg-muted text-foreground" },
-    { label: "Нийт захиалга", value: stats?.orders, href: "/admin/orders", color: "bg-ink text-white" },
-    { label: "Шинэ захиалга", value: stats?.newCount, href: "/admin/orders?status=NEW", color: "bg-rating/20 text-rating" },
-    { label: "Хүргэлтэнд гарсан", value: stats?.onTheWay, href: "/admin/orders?status=ON_THE_WAY", color: "bg-brand/20 text-brand" },
+    { label: "Нийт бүтээгдэхүүн", value: products, href: "/admin/products", color: "bg-muted text-foreground" },
+    { label: "Нийт захиалга", value: orders, href: "/admin/orders", color: "bg-ink text-white" },
+    { label: "Шинэ захиалга", value: countFor("NEW"), href: "/admin/orders?status=NEW", color: "bg-rating/20 text-rating" },
+    { label: "Хүргэлтэнд гарсан", value: countFor("ON_THE_WAY"), href: "/admin/orders?status=ON_THE_WAY", color: "bg-brand/20 text-brand" },
   ];
 
   return (
@@ -44,9 +30,7 @@ export default function AdminDashboard() {
             href={card.href}
             className={`rounded-lg p-5 ${card.color} transition-opacity hover:opacity-80`}
           >
-            <div className="mb-1 text-3xl font-bold">
-              {stats === null ? "—" : card.value}
-            </div>
+            <div className="mb-1 text-3xl font-bold">{card.value}</div>
             <div className="text-sm font-medium">{card.label}</div>
           </Link>
         ))}

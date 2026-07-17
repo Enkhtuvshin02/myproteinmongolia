@@ -43,11 +43,11 @@ export default function AdminPromotionPage() {
 
   useEffect(() => {
     // Fetch products first
-    fetch("/api/admin/products")
+    fetch("/api/admin/products?pageSize=1000")
       .then((r) => r.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setProducts(data);
+        if (Array.isArray(data?.data)) {
+          setProducts(data.data);
         }
       })
       .catch(() => {});
