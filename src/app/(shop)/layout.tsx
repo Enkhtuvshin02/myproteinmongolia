@@ -6,7 +6,6 @@ import { CartProvider } from "@/components/cart-context";
 import { AccountProvider } from "@/components/account-context";
 import { OrdersProvider } from "@/components/orders-context";
 import { Header } from "@/components/header";
-import { TopBar } from "@/components/top-bar";
 import { Footer } from "@/components/footer";
 import { CartDrawer } from "@/components/cart-drawer";
 import { PromotionPopup } from "@/components/promotion-popup";
@@ -36,7 +35,6 @@ export default function RootLayout({
         <AccountProvider>
           <OrdersProvider>
             <CartProvider>
-              <TopBar />
               <Suspense fallback={<div className="h-[72px] border-b border-shop-line" />}>
                 <Header />
               </Suspense>

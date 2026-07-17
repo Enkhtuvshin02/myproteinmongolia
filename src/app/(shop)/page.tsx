@@ -2,8 +2,6 @@ import Link from "next/link";
 import { CreditCard, Phone, ShieldCheck, Truck } from "lucide-react";
 import { ProductSection } from "@/components/product-section";
 import { Hero } from "@/components/hero";
-import { MarqueeStrip } from "@/components/marquee-strip";
-import { CategoryShowcase } from "@/components/category-showcase";
 import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -36,9 +34,6 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <MarqueeStrip />
-
-      <CategoryShowcase />
 
       <ProductSection
         eyebrow="02 — Онцлох"
